@@ -23,28 +23,20 @@ jobs:
           sudo apt update
           sudo apt install -y build-essential cmake libopencv-dev libgtest-dev libtbb-dev libssl-dev
 
-      # Step 3: Build Google Test
-      - name: Build Google Test
-        run: |
-          cd /usr/src/gtest
-          sudo cmake .
-          sudo make
-          sudo cp *.a /usr/lib
-
-      # Step 4: Configure CMake
+      # Step 3: Configure CMake
       - name: Configure CMake
         run: |
           mkdir build
           cd build
           cmake ..
 
-      # Step 5: Build the project
+      # Step 4: Build the project
       - name: Build the project
         run: |
           cd build
           make
 
-      # Step 6: Run the tests
+      # Step 5: Run the tests
       - name: Run tests
         run: |
           cd build
