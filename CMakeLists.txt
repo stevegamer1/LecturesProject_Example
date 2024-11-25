@@ -62,7 +62,6 @@ endif()
 
 # Link libraries to the test executable
 target_link_libraries(PreprocessingTest PRIVATE 
-    ${CUDA_LIBRARIES} 
     ${OpenCV_LIBS} 
     ${GTEST_LIBRARIES} 
     TBB::tbb  # Add TBB for preprocessing
@@ -74,6 +73,7 @@ target_link_libraries(PreprocessingTest PRIVATE
 if(NOT BUILD_TESTS_ONLY)
 include_directories(${CUDA_INCLUDE_DIRS})
 endif()
+
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(include)
 
