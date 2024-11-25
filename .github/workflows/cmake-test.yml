@@ -21,13 +21,6 @@ jobs:
           sudo apt update
           sudo apt install -y build-essential cmake libopencv-dev libgtest-dev libtbb-dev
 
-      - name: Build Google Test
-        run: |
-          cd /usr/src/gtest
-          sudo cmake .
-          sudo make
-          sudo cp *.a /usr/lib
-
       - name: Build and run tests
         run: |
           mkdir build
