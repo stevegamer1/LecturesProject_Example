@@ -1,12 +1,16 @@
 cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
 
-project(ConvNetServer LANGUAGES CXX CUDA)
+option(BUILD_TESTS_ONLY "Build only tests" OFF)
+
+if(NOT BUILD_TESTS_ONLY)
+  project(ConvNetServer LANGUAGES CXX CUDA)
+else()
+  project(ConvNetServer LANGUAGES CXX)
+endif()
 
 # Enable C++11 standard
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-option(BUILD_TESTS_ONLY "Build only tests" OFF)
 
 if(NOT BUILD_TESTS_ONLY)
   # Enable CUDA
@@ -28,12 +32,12 @@ find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
 if(NOT BUILD_TESTS_ONLY)
-# Define source files for backend code
-set(SRC_FILES
-    src/backend.cpp)
+  # Define source files for backend code
+  set(SRC_FILES
+      src/backend.cpp)
 
-# Add the main executable
-add_executable(${PROJECT_NAME} ${SRC_FILES})
+  # Add the main executable
+  add_executable(${PROJECT_NAME} ${SRC_FILES})
 endif()
 
 # Define source files for preprocessing tests
@@ -48,16 +52,16 @@ add_executable(PreprocessingTest ${TEST_FILES})
 add_subdirectory(src)
 
 if(NOT BUILD_TESTS_ONLY)
-# Link libraries to the main executable
-target_link_libraries(${PROJECT_NAME} PRIVATE 
-    ${CUDA_LIBRARIES} 
-    ${OpenCV_LIBS} 
-    cpprestsdk::cpprest 
-    OpenSSL::SSL 
-    OpenSSL::Crypto 
-    TBB::tbb
-    pthread
-)
+  # Link libraries to the main executable
+  target_link_libraries(${PROJECT_NAME} PRIVATE 
+      ${CUDA_LIBRARIES} 
+      ${OpenCV_LIBS} 
+      cpprestsdk::cpprest 
+      OpenSSL::SSL 
+      OpenSSL::Crypto 
+      TBB::tbb
+      pthread
+  )
 endif()
 
 # Link libraries to the test executable
@@ -71,7 +75,7 @@ target_link_libraries(PreprocessingTest PRIVATE
 
 # Include necessary directories
 if(NOT BUILD_TESTS_ONLY)
-include_directories(${CUDA_INCLUDE_DIRS})
+  include_directories(${CUDA_INCLUDE_DIRS})
 endif()
 
 include_directories(${OpenCV_INCLUDE_DIRS})
