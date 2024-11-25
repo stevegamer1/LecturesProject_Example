@@ -49,6 +49,7 @@ project-root/
 ├── docker-compose.yml      # Docker Compose setup to build and run the server
 ├── index.html              # Web interface for uploading images
 └── README.md               # This file!
+```
 
 ## 🛠️ Prerequisites
 
@@ -66,12 +67,13 @@ Before using this project, ensure you have the following installed:
 ```bash
 git clone https://github.com/your-username/your-repository.git
 cd your-repository
-
+```
 
 ### 2. Build and Run with Docker
 
 ```bash
 docker-compose up --build
+```
 
 ## 📜 License
 
