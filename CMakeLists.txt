@@ -16,7 +16,7 @@ find_package(cpprestsdk REQUIRED)
 find_package(OpenSSL REQUIRED)
 
 set(SRC_FILES
-    src/server.cpp
+    src/backend.cpp
 )
 
 # Add the executable

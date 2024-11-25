@@ -1,0 +1,47 @@
+services:
+  server:
+    image: server
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.server
+    volumes:
+      - build_output:/app/build
+    # network_mode: host
+    ports:
+      - "8080:8080"
+    depends_on:
+      - builder
+    networks:
+      - app-network
+    command: ["bash", "-c", "./ConvNetServer; sleep infinity"]
+
+  builder:
+    image: builder
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.builder
+    volumes:
+      - build_output:/app/build
+    command: ["cmake", "--build", "/app/build"]
+
+  web:
+    image: web
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.web
+    # network_mode: host
+    ports:
+      - "8081:80"
+    volumes:
+      - ./index.html:/app/index.html
+    networks:
+      - app-network
+
+
+networks:
+  app-network:
+    driver: bridge
+
+# Define the named volume
+volumes:
+  build_output:
