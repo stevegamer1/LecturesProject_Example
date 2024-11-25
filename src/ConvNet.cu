@@ -193,17 +193,20 @@ std::vector<float> ConvNet::preprocessImage(const cv::Mat& img) {
     cv::Mat gray, resized;
 
     // Convert to grayscale
-    if (img.channels() == 3) {
-        cv::cvtColor(img, gray, cv::COLOR_BGR2GRAY);
-    } else {
-        gray = img;
-    }
+    // if (img.channels() == 3) {
+    //     cv::cvtColor(img, gray, cv::COLOR_BGR2GRAY);
+    // } else {
+    //     gray = img;
+    // }
+    gray = processor.toGrayscale(img);
 
     // Resize to target dimensions
     cv::resize(gray, resized, cv::Size(inputWidth, inputHeight));
 
     // Normalize to [0, 1]
-    resized.convertTo(resized, CV_32F, 1.0 / 255);
+    // resized.convertTo(resized, CV_32F, 1.0 / 255);
+
+    resized = processor.normalize(resized);
 
     // Flatten into a vector
     std::vector<float> input(inputWidth * inputHeight);

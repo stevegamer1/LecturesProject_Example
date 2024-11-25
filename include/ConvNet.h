@@ -5,6 +5,7 @@
 #include <vector>
 #include <cuda_runtime.h>
 #include <opencv2/opencv.hpp>
+#include "Preprocessing.h"
 
 class ConvNet {
 public:
@@ -22,6 +23,8 @@ private:
     int outputWidth, outputHeight;
     int numKernels;
     int fcInputSize, fcOutputSize;
+
+    Preprocessor processor;
 
     std::vector<float> kernels, fcWeights, fcBias;
     float *d_input, *d_kernels, *d_convOutput, *d_fcWeights, *d_fcBias, *d_finalOutput;
