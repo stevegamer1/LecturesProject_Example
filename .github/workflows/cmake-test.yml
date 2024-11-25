@@ -17,26 +17,36 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Install dependencies
+      # Step 2: Set up CUDA
+      - name: Install NVIDIA CUDA Toolkit
+        run: |
+          sudo apt update
+          sudo apt install -y wget gnupg
+          wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
+          sudo dpkg -i cuda-keyring_1.0-1_all.deb
+          sudo apt-get update
+          sudo apt-get install -y cuda-12-2
+
+      # Step 3: Install dependencies
       - name: Install dependencies
         run: |
           sudo apt update
           sudo apt install -y build-essential cmake libopencv-dev libgtest-dev libtbb-dev libssl-dev
 
-      # Step 3: Configure CMake
+      # Step 4: Configure CMake
       - name: Configure CMake
         run: |
           mkdir build
           cd build
           cmake ..
 
-      # Step 4: Build the project
+      # Step 5: Build the project
       - name: Build the project
         run: |
           cd build
           make
 
-      # Step 5: Run the tests
+      # Step 6: Run the tests
       - name: Run tests
         run: |
           cd build
