@@ -6,8 +6,12 @@ project(ConvNetServer LANGUAGES CXX CUDA)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Enable CUDA
-find_package(CUDA REQUIRED)
+option(BUILD_TESTS_ONLY "Build only tests" OFF)
+
+if(NOT BUILD_TESTS_ONLY)
+  # Enable CUDA
+  find_package(CUDA REQUIRED)
+endif()
 
 # OpenCV package
 find_package(OpenCV REQUIRED)
@@ -23,17 +27,19 @@ include_directories(${TBB_INCLUDE_DIRS})
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
+if(NOT BUILD_TESTS_ONLY)
 # Define source files for backend code
 set(SRC_FILES
     src/backend.cpp)
+
+# Add the main executable
+add_executable(${PROJECT_NAME} ${SRC_FILES})
+endif()
 
 # Define source files for preprocessing tests
 set(TEST_FILES
     src/Preprocessing.cpp
     src/PreprocessingTest.cpp)
-
-# Add the main executable
-add_executable(${PROJECT_NAME} ${SRC_FILES})
 
 # Add preprocessing tests
 add_executable(PreprocessingTest ${TEST_FILES})
@@ -41,6 +47,7 @@ add_executable(PreprocessingTest ${TEST_FILES})
 # Add subdirectory for src
 add_subdirectory(src)
 
+if(NOT BUILD_TESTS_ONLY)
 # Link libraries to the main executable
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     ${CUDA_LIBRARIES} 
@@ -51,6 +58,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     TBB::tbb
     pthread
 )
+endif()
 
 # Link libraries to the test executable
 target_link_libraries(PreprocessingTest PRIVATE 
@@ -63,7 +71,9 @@ target_link_libraries(PreprocessingTest PRIVATE
 )
 
 # Include necessary directories
+if(NOT BUILD_TESTS_ONLY)
 include_directories(${CUDA_INCLUDE_DIRS})
+endif()
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(include)
 
