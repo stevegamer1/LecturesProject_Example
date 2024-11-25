@@ -13,15 +13,14 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(NOT BUILD_TESTS_ONLY)
-  # Enable CUDA
   find_package(CUDA REQUIRED)
+  find_package(cpprestsdk REQUIRED)
+  find_package(OpenSSL REQUIRED)
 endif()
 
 # OpenCV package
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
-find_package(cpprestsdk REQUIRED)
-find_package(OpenSSL REQUIRED)
 
 # Intel TBB package
 find_package(TBB REQUIRED)
