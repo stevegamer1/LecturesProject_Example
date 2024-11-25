@@ -13,41 +13,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up CUDA
-      - name: Install NVIDIA CUDA Toolkit
-        run: |
-          sudo apt update
-          sudo apt install -y wget gnupg
-          wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
-          sudo dpkg -i cuda-keyring_1.0-1_all.deb
-          sudo apt-get update
-          sudo apt-get install -y cuda-12-2
-
-      # Step 3: Install dependencies
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y build-essential cmake libopencv-dev libgtest-dev libtbb-dev libssl-dev
+          sudo apt install -y build-essential cmake libopencv-dev libgtest-dev libtbb-dev
 
-      # Step 4: Configure CMake
-      - name: Configure CMake
+      - name: Build Google Test
+        run: |
+          cd /usr/src/gtest
+          sudo cmake .
+          sudo make
+          sudo cp *.a /usr/lib
+
+      - name: Build and run tests
         run: |
           mkdir build
           cd build
-          cmake ..
-
-      # Step 5: Build the project
-      - name: Build the project
-        run: |
-          cd build
+          cmake .. -DBUILD_TESTS_ONLY=ON
           make
-
-      # Step 6: Run the tests
-      - name: Run tests
-        run: |
-          cd build
           ctest --output-on-failure
+
