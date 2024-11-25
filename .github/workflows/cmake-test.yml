@@ -1,0 +1,51 @@
+name: CMake Build and Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Install dependencies
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential cmake libopencv-dev libgtest-dev libtbb-dev libssl-dev
+
+      # Step 3: Build Google Test
+      - name: Build Google Test
+        run: |
+          cd /usr/src/gtest
+          sudo cmake .
+          sudo make
+          sudo cp *.a /usr/lib
+
+      # Step 4: Configure CMake
+      - name: Configure CMake
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+
+      # Step 5: Build the project
+      - name: Build the project
+        run: |
+          cd build
+          make
+
+      # Step 6: Run the tests
+      - name: Run tests
+        run: |
+          cd build
+          ctest --output-on-failure
