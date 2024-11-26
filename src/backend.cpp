@@ -79,6 +79,8 @@ void handle_post(http_request request) {
 
 int main() {
     http_listener listener(U("http://localhost:8080/predict"));
+    // http_listener listener(U("http://0.0.0.0:8080/predict"));
+
 
     listener.support(methods::POST, handle_post);
     listener.support(methods::OPTIONS, handle_options);  // Support CORS preflight requests

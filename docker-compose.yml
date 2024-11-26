@@ -6,7 +6,6 @@ services:
       dockerfile: docker/Dockerfile.server
     volumes:
       - build_output:/app/build
-    # network_mode: host
     ports:
       - "8080:8080"
     depends_on:
@@ -29,14 +28,26 @@ services:
   #   build:
   #     context: .
   #     dockerfile: docker/Dockerfile.web
-  #   # network_mode: host
   #   ports:
   #     - "8081:80"
+  #   depends_on:
+  #     - nginx
   #   volumes:
   #     - ./index.html:/app/index.html
   #   networks:
   #     - app-network
 
+  nginx:
+    image: nginx
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.nginx
+    ports:
+      - "3000:3000" # Expose port 3000 for frontend access
+    depends_on:
+      - server
+    networks:
+      - app-network
 
 networks:
   app-network:

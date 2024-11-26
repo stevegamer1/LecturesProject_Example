@@ -1,19 +1,18 @@
 # Dockerfile.server
-FROM python:3.8
+FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 # Install runtime dependencies
 RUN apt update && \
-    apt install -y libopencv-dev libssl-dev libcpprest-dev && \
+    apt install -y libssl-dev libcpprest-dev libtbb-dev libopencv-dev python3 && \
     apt clean
 
 # Set working directory
 WORKDIR /app
 
-# Copy the HTML file to the container
-COPY ../index.html /app/
 # Copy the compiled binary from the builder container
 COPY --from=builder /app/build/ConvNetServer /app/
+
 # Copy the bash server up file to the container
 COPY ../up_server.sh /app/
 
@@ -21,7 +20,7 @@ COPY ../up_server.sh /app/
 COPY ../data /app/data/
 
 RUN chmod +x /app/ConvNetServer
-RUN chmod +x /app/up_server.sh
 
-# Run the server
-# CMD ["sleep", "3600"]
+EXPOSE 8080
+
+RUN chmod +x /app/up_server.sh

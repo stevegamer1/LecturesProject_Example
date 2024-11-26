@@ -20,8 +20,9 @@
             formData.append('image', fileInput.files[0]);
     
             try {
-                const response = await fetch('http://localhost:8080/image', {
+                const response = await fetch('http://server:8080/predict', {
                     method: 'POST',
+                    // mode: "cors",
                     headers: {
                         // Remove content-type header; FormData automatically sets it
                     },
